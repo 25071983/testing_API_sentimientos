@@ -1,4 +1,6 @@
 pandas 
 xlrd
 openpyxl
+matplotlib
+scikit-learn
 
