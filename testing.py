@@ -35,7 +35,7 @@ for nombre_hoja, df in hojas.items():
     hojas_procesadas[nombre_hoja] = df
 
 # Guardar nuevo Excel
-salida = "comentarios_procesados.xlsx"
+salida = "./output/comentarios_procesados.xlsx"
 with pd.ExcelWriter(salida, engine="openpyxl") as writer:
     for nombre_hoja, df in hojas_procesadas.items():
         df.to_excel(writer, sheet_name=nombre_hoja, index=False)
