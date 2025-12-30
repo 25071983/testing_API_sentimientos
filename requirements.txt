@@ -3,4 +3,5 @@ xlrd
 openpyxl
 matplotlib
 scikit-learn
+joblib
 
