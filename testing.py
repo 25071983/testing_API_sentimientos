@@ -5,6 +5,14 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 import numpy as np
 from sklearn.metrics import precision_recall_fscore_support
+from matplotlib.colors import LinearSegmentedColormap
+
+from sentiment_model import SentimentModel
+
+MODEL_PATH = "../train/output/modelo_final.pkl"
+VECT_PATH = "../train/output/vectorizador_final.pkl"
+
+model = SentimentModel(MODEL_PATH, VECT_PATH)
 
 #import openpyxl
 
@@ -25,7 +33,10 @@ def procesar_comentario(texto):
     Aquí va tu lógica real:
     análisis, llamada a API, modelo, etc.
     """
-    return random.choice([-1, 0, 1])
+    #return random.choice([-1, 0, 1])
+
+    pred = model.predict(texto)
+    return pred
 
 # Recorrer cada hoja
 for nombre_hoja, df in hojas.items():
@@ -33,6 +44,7 @@ for nombre_hoja, df in hojas.items():
     # columna 0 -> id
     # columna 1 -> comentario
     # columna 2 -> sentimiento
+    print(f"procesando hoja: {nombre_hoja} ")
 
     # Procesar comentarios
     df["inferencia"] = df.iloc[:, 1].apply(procesar_comentario)
@@ -91,8 +103,8 @@ def generar_matriz_confusion(
     hojas_procesadas,
     col_real="Codigo",
     col_pred="inferencia",
-    etiquetas=(-1, 0, 1),
-    nombres_etiquetas=("Negativo", "Neutro", "Positivo"),
+    etiquetas=(1, 0),
+    nombres_etiquetas=("Positivo","Negativo"),
     archivo_salida="./output/matriz_confusion.jpg"
 ):
     """
@@ -117,9 +129,17 @@ def generar_matriz_confusion(
         labels=etiquetas
     )
 
+    # Normalizar por fila para mejor interpretación
+    cm_norm = cm.astype(float) / cm.sum(axis=1, keepdims=True)
+    
+    # Crear colormap personalizado:
+    # Verde para diagonal, amarillo/naranjo para errores
+    colors = ["#FFF3B0", "#F4A261", "#2A9D8F"]
+    cmap = LinearSegmentedColormap.from_list("custom_cm", colors)
+
     # Crear figura
     plt.figure(figsize=(6, 5))
-    plt.imshow(cm)
+    plt.imshow(cm_norm, cmap=cmap)
     plt.title("Matriz de Confusión Global")
     plt.xlabel("Predicción")
     plt.ylabel("Valor real")
@@ -137,6 +157,8 @@ def generar_matriz_confusion(
     plt.savefig(archivo_salida, dpi=300)
     plt.close()
 
+print("\n\n generar matriz de confusion")
+
 generar_matriz_confusion(
     hojas_procesadas,
     archivo_salida="./output/matriz_confusion_sentimientos.jpg"
@@ -149,8 +171,8 @@ def calcular_metricas_por_clase(
     hojas_procesadas,
     col_real="Codigo",
     col_pred="inferencia",
-    etiquetas=(-1, 0, 1),
-    nombres_etiquetas=("Negativo", "Neutro", "Positivo")
+    etiquetas=(1, 0),
+    nombres_etiquetas=("Positivo","Negativo"),
 ):
     """
     Calcula Precision, Recall y F1-score por clase.
@@ -179,6 +201,8 @@ def calcular_metricas_por_clase(
     })
 
     return metricas_df
+
+print("\n\n calcular metrica por clases")
 
 metricas = calcular_metricas_por_clase(hojas_procesadas)
 print(metricas)
@@ -226,3 +250,4 @@ for _, fila in metricas.iterrows():
         nombre_clase=fila["Clase"]
     )
     print("-" * 60)
+
