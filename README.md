@@ -14,6 +14,12 @@ python -m venv venv
 venv\Scripts\activate
 ```
 
+### Instalacion de paquetes
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Comandos Git
 
 ```bash
