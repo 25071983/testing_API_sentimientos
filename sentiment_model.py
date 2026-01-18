@@ -8,7 +8,7 @@ class SentimentModel:
     def predict(self, text: str) -> int:
         """
         text: string
-        return: predicción (-1, 0, 1)
+        return: predicción (1=positivo, 0=negativo)
         """
         X_vec = self.vectorizer.transform([text])
         return int(self.model.predict(X_vec)[0])
