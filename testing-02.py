@@ -4,7 +4,7 @@ import random
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 import numpy as np
-from sklearn.metrics import precision_recall_fscore_support
+from sklearn.metrics import accuracy_score,precision_recall_fscore_support
 from matplotlib.colors import LinearSegmentedColormap
 
 from sentiment_model import SentimentModel
@@ -138,6 +138,10 @@ def accuracy_por_hoja(hojas_procesadas,
 acc = accuracy_por_hoja(hojas_procesadas)
 print("Accuracy por hoja")
 print(acc)
+
+df_acc = pd.DataFrame(acc)
+
+df_acc.to_csv("./output/resultados_accuracy.csv", index=False, encoding="utf-8")
 
 
 
@@ -358,3 +362,45 @@ for _, fila in metricas.iterrows():
     )
     print("-" * 60)
 
+
+
+def evaluar_metricas_por_hoja(
+    hojas_procesadas ,
+    col_real: str = "Codigo",
+    col_pred: str = "inferencia",
+    output_xls: str = "./output/metricas_por_hoja.xlsx"
+):
+    """
+    Calcula accuracy, precision, recall y F1 score por hoja
+    usando precision_recall_fscore_support
+    """
+
+    resultados = []
+
+    for nombre_hoja, df in hojas_procesadas.items():
+        y_true = df[col_real]
+        y_pred = df[col_pred]
+
+        precision, recall, f1, _ = precision_recall_fscore_support(
+            y_true,
+            y_pred,
+            average="binary",
+            zero_division=0
+        )
+
+        metricas = {
+            "hoja": nombre_hoja,
+            "accuracy": accuracy_score(y_true, y_pred),
+            "precision": precision,
+            "recall": recall,
+            "f1_score": f1
+        }
+
+        resultados.append(metricas)
+
+    df_resultados = pd.DataFrame(resultados)
+    df_resultados.to_excel(output_xls, index=False)
+
+    return resultados
+
+evaluar_metricas_por_hoja(hojas_procesadas)
