@@ -32,6 +32,10 @@ git remote add origin https://github.com/25071983/testing_API_sentimientos.git
 git remote -v
 git push -u origin desarrollo
 ```
+## Ejecucion del programa
+```bash
+python testing-02.py
+```
 
 
 
