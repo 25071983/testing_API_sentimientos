@@ -1,0 +1,16 @@
+hoja,accuracy,evaluacion
+general,0.9325,Muy buen / excelente desempeño
+cl,0.9125,Muy buen / excelente desempeño
+arg,0.91875,Muy buen / excelente desempeño
+col,0.8875,Muy buen / excelente desempeño
+vez,0.80625,Buen desempeño
+mex,0.8125,Buen desempeño
+esp,0.81875,Buen desempeño
+pos_fuerte,1.0,Muy buen / excelente desempeño
+pos_leve,0.76,Buen desempeño
+nega_fuerte,0.79,Buen desempeño
+nega_leve,0.92,Muy buen / excelente desempeño
+ironia_negativa,0.24,Modelo muy débil
+ironia_positiva,0.62,Modelo débil / poco confiable
+sarcasmo_negativo,0.13,Modelo muy débil
+sarcasmo_positivo,0.34,Modelo muy débil
