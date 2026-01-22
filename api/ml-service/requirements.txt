@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+scikit-learn==1.5.2
+joblib
+python-multipart
+numpy>=1.26.0
